@@ -1,8 +1,13 @@
+<div align="center">
+ <img alt="ollama-eng-logo" height="300px" src="ollama-eng-logo.png">
+</div>
+
+
 # 🤖 Ollama Engineer
 
-**Before we begin - This is a Fork from the incredible https://github.com/Doriandarko/claude-engineer - with full credits to https://github.com/Doriandarko.  Please support the work he is doing there.**
+***Before we begin - This is a Fork from the incredible https://github.com/Doriandarko/claude-engineer - with full credits to https://github.com/Doriandarko.  Please support the work he is doing there.***
 
-This is a fork focuses exclusively on the a locally capable Ollama Engineer so we can have an open-source and free to run locally AI assistant that Claude-Engineer offered.
+***This fork focuses exclusively on the a locally capable Ollama Engineer so we can have an open-source and free to run locally AI assistant that Claude-Engineer offered.***
 
 Ollama Engineer is an interactive command-line interface (CLI) that let's developers use a local Ollama ran model to assist with software development tasks.  Just use one of the supported Open-Source function calling models like [Llama 3.1, Mistral Nemo, Command-R+, etc].  This tool combines the capabilities of a large language model to perform practical file system operations, web search functionality, intelligent code analysis, and execution capabilities.
 
