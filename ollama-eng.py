@@ -65,10 +65,10 @@ load_dotenv()
 client = ollama.AsyncClient()
 
 # Initialize the Tavily client
-tavily_api_key = os.getenv("TAVILY_API_KEY")
-if not tavily_api_key:
-    raise ValueError("TAVILY_API_KEY not found in environment variables")
-tavily = TavilyClient(api_key=tavily_api_key)
+# tavily_api_key = os.getenv("TAVILY_API_KEY")
+# if not tavily_api_key:
+#     raise ValueError("TAVILY_API_KEY not found in environment variables")
+# tavily = TavilyClient(api_key=tavily_api_key)
 
 console = Console()
 
@@ -100,14 +100,23 @@ MAX_CONTINUATION_ITERATIONS = 25
 MAX_CONTEXT_TOKENS = 200000  # Reduced to 200k tokens for context window
 CONTEXT_WINDOW_SIZE = 128000  # Based on most OpenSource LLMs
 
-# Models
+# # Models
+# # Models that maintain context memory across interactions
+# MAINMODEL = "mistral-nemo"  # Maintains conversation history and file contents
+
+# # Models that don't maintain context (memory is reset after each call)
+# TOOLCHECKERMODEL = "mistral-nemo"
+# CODEEDITORMODEL = "mistral-nemo"
+# CODEEXECUTIONMODEL = "mistral-nemo"
+
 # Models that maintain context memory across interactions
-MAINMODEL = "mistral-nemo"  # Maintains conversation history and file contents
+MAINMODEL = "llama3.2:1b"  # Maintains conversation history and file contents
 
 # Models that don't maintain context (memory is reset after each call)
-TOOLCHECKERMODEL = "mistral-nemo"
-CODEEDITORMODEL = "mistral-nemo"
-CODEEXECUTIONMODEL = "mistral-nemo"
+TOOLCHECKERMODEL = "llama3.2:1b"
+CODEEDITORMODEL = "llama3.2:1b"
+CODEEXECUTIONMODEL = "llama3.2:1b"
+
 
 # System prompts
 BASE_SYSTEM_PROMPT = """
@@ -389,6 +398,8 @@ async def generate_edit_instructions(
             ],
             options={"num_ctx": CONTEXT_WINDOW_SIZE},
         )
+
+        response = response.model_dump()
 
         # Parse the response to extract SEARCH/REPLACE blocks
         # edit_instructions = parse_search_replace_blocks(response.content[0].text)
@@ -997,6 +1008,8 @@ async def send_to_ai_for_executing(code, execution_result):
             options={"num_ctx": CONTEXT_WINDOW_SIZE},
         )
 
+        response = response.model_dump()
+
         analysis = response['message']['content']
 
         return analysis
@@ -1098,6 +1111,7 @@ async def chat_with_ollama(
             options={"num_ctx": CONTEXT_WINDOW_SIZE},
         )
 
+        response = response.model_dump()
         # Check if the response is a dictionary
         if isinstance(response, dict):
             if "error" in response:
@@ -1267,6 +1281,8 @@ async def chat_with_ollama(
                 stream=False,
                 options={"num_ctx": CONTEXT_WINDOW_SIZE},
             )
+
+            tool_response = tool_response.model_dump()
 
             if isinstance(tool_response, dict) and "message" in tool_response:
                 tool_checker_response = tool_response["message"].get("content", "")
