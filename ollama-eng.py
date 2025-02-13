@@ -1102,7 +1102,8 @@ async def chat_with_ollama(
             "content": update_system_prompt(current_iteration, max_iterations),
         }
         messages_with_system = [system_message] + messages
-
+        
+        print(f"Loading model {MAINMODEL}")
         response = await client.chat(
             model=MAINMODEL,
             messages=messages_with_system,
@@ -1112,6 +1113,7 @@ async def chat_with_ollama(
         )
 
         response = response.model_dump()
+
         # Check if the response is a dictionary
         if isinstance(response, dict):
             if "error" in response:
@@ -1140,6 +1142,7 @@ async def chat_with_ollama(
                         style="bold red",
                     )
                 )
+                
                 return (
                     "I'm sorry, but there was an unexpected error in the model response.",
                     False,
